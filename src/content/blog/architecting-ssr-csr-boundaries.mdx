@@ -1,0 +1,26 @@
+# Architecting SSR and CSR Boundaries
+
+How to decide what should render on the server versus the client in modern React applications.
+
+## The Core Question
+
+Every component in a Next.js app lives somewhere on the spectrum between fully server-rendered and fully client-rendered. The challenge is drawing that line intentionally.
+
+## Server Components by Default
+
+Start with React Server Components as your default. Move to client components only when you need:
+
+- **Interactivity** — event handlers like `onClick`, `onChange`
+- **Browser APIs** — `window`, `localStorage`, `IntersectionObserver`
+- **State** — `useState`, `useReducer`, `useContext`
+- **Effects** — `useEffect`, `useLayoutEffect`
+
+## The Boundary Pattern
+
+> Push `"use client"` as far down the tree as possible.
+
+Instead of making an entire page a client component, extract only the interactive piece into a small client component and keep the parent as a server component.
+
+## Conclusion
+
+The best architecture is one where the rendering boundary is an intentional, documented decision — not an accident.

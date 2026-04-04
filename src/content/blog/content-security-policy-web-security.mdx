@@ -1,0 +1,180 @@
+# Content Security Policy for Modern Web Security
+
+Why CSP matters, what it protects against, and how to introduce it without turning deployment into trial and error.
+
+## Why CSP Still Matters
+
+Most modern frontend stacks already escape HTML, bundle JavaScript safely, and ship sensible defaults. That helps, but it does not remove the risk of script injection, compromised third-party dependencies, or unsafe inline patterns.
+
+Content Security Policy, or CSP, gives the browser a second line of defense. Instead of trusting every resource the page attempts to load, the browser enforces a strict allowlist for scripts, styles, images, frames, and network connections.
+
+That makes CSP one of the few controls that can reduce the blast radius of a frontend security bug after it ships.
+
+## What CSP Actually Does
+
+CSP is delivered as an HTTP response header. A policy tells the browser which sources are allowed for different resource types.
+
+At a high level, it answers questions like these:
+
+- Which domains are allowed to execute JavaScript?
+- Can this page run inline scripts?
+- Which APIs can the page connect to?
+- Is the page allowed to be embedded in an iframe?
+
+If the browser sees a resource request that violates the policy, it blocks it.
+
+## The Security Problem It Solves
+
+The biggest reason teams adopt CSP is to limit the impact of cross-site scripting, or XSS.
+
+If an attacker manages to inject markup or script into a page, a strong CSP can prevent that payload from executing. The policy does not fix the underlying bug, but it can stop an injection from becoming full code execution in the browser.
+
+It is also useful for controlling risk from:
+
+- third-party analytics tags
+- compromised script CDNs
+- unexpected inline JavaScript
+- clickjacking through hostile framing
+
+## A Practical Starting Policy
+
+An intentionally small starting point looks like this:
+
+```text
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: https:;
+  font-src 'self' https:;
+  connect-src 'self' https:;
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+```
+
+This is not a copy-paste answer for every app, but it shows the shape of a good policy.
+
+The important part is that every directive expresses intent. If a resource type is not expected, the policy should not permit it broadly.
+
+## The Directives Worth Understanding First
+
+### `default-src`
+
+This is the fallback rule. If a more specific directive is missing, the browser falls back to `default-src`.
+
+Start with `'self'` unless there is a clear reason not to.
+
+### `script-src`
+
+This controls where JavaScript can execute from. It is usually the most important directive because script execution is where XSS becomes dangerous.
+
+If `script-src` is too permissive, the rest of the policy often does not matter much.
+
+### `style-src`
+
+This controls stylesheets and inline style blocks. Many teams temporarily allow `'unsafe-inline'` here because CSS-in-JS or framework output can make it hard to remove on day one.
+
+That can be acceptable as an intermediate state, but it should stay an explicit compromise rather than an unexamined default.
+
+### `connect-src`
+
+This defines which endpoints the browser can talk to using `fetch`, `XMLHttpRequest`, WebSockets, and similar APIs.
+
+For modern React applications, this directive becomes important quickly because data fetching, analytics, feature flags, and monitoring all rely on outbound connections.
+
+### `frame-ancestors`
+
+This controls who is allowed to embed your site in an iframe. Setting:
+
+```text
+frame-ancestors 'none'
+```
+
+is a strong default if your site should never be framed.
+
+## Nonces, Hashes, and Why They Matter
+
+The moment a policy allows `'unsafe-inline'` inside `script-src`, much of its XSS protection is weakened. That is why mature CSP setups rely on nonces or hashes instead.
+
+### Nonces
+
+A nonce is a per-request random token attached to script tags the server explicitly trusts.
+
+The header includes the nonce:
+
+```text
+script-src 'self' 'nonce-random-value'
+```
+
+And the allowed inline script includes the same nonce:
+
+```html
+<script nonce="random-value">/* trusted script */</script>
+```
+
+Anything without that nonce is blocked.
+
+### Hashes
+
+Hashes work well for static inline snippets. Instead of allowing a script by request-time token, the browser allows only a script block whose exact contents match a declared hash.
+
+Both approaches are stricter than allowing all inline execution.
+
+## Common CSP Mistakes
+
+The most common failure mode is not having no CSP. It is having a policy that looks strict but is effectively permissive.
+
+Examples:
+
+- allowing `'unsafe-inline'` and `'unsafe-eval'` in production without understanding why
+- allowing every `https:` source in `script-src`
+- adding third-party domains one by one until the policy becomes meaningless
+- deploying an enforcing policy before observing real violations
+
+A CSP should be treated like code. If it keeps expanding to fix breakages without design review, it will drift into a false sense of security.
+
+## The Right Rollout Strategy
+
+The safest way to adopt CSP is to start with report-only mode.
+
+Use `Content-Security-Policy-Report-Only` first. That tells the browser to record violations without blocking resources. It gives the team time to discover:
+
+- hidden third-party dependencies
+- inline script usage in templates
+- framework-specific runtime requirements
+- unexpected network calls from client code
+
+Once the observed traffic matches the intended architecture, the policy can move into enforcement.
+
+## CSP in a Next.js Application
+
+Next.js applications are a good fit for CSP, but the details matter. A real app may rely on:
+
+- framework runtime scripts
+- optimized images
+- external fonts
+- analytics providers
+- API origins separate from the main host
+
+That means the correct policy is the one that matches the app you actually run, not a generic template from a security blog.
+
+For a production-grade setup, teams should inventory every external dependency and ask whether each source is necessary. CSP becomes much easier to maintain when the frontend architecture itself is deliberate.
+
+## What Good Looks Like
+
+A strong CSP has a few clear qualities:
+
+- it starts from deny-by-default thinking
+- it minimizes script execution sources aggressively
+- it avoids unsafe inline allowances where possible
+- it is tested in report-only mode before enforcement
+- it evolves alongside actual application architecture
+
+That last point matters. Security headers are not paperwork. They are executable constraints on the system.
+
+## Final Takeaway
+
+Content Security Policy is worth adopting because it turns browser behavior into an enforceable contract. If the application only expects trusted scripts, trusted connections, and trusted frames, the browser should be told exactly that.
+
+The best CSP is not the longest one. It is the one that is specific, minimal, and honest about how the application works.
