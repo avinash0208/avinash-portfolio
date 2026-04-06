@@ -4,6 +4,7 @@
   --background: #f7f6f2;
   --foreground: #1a2028;
   --surface: #ffffff;
+  --header-bg: #fafbfd;
   --muted: #5a6470;
   --border: #d7dce2;
   --accent: #116466;
@@ -14,6 +15,7 @@
   --background: #101418;
   --foreground: #eaf0f6;
   --surface: #151c22;
+  --header-bg: #0b1116;
   --muted: #a8b4c0;
   --border: #25313d;
   --accent: #62d5c8;
@@ -36,6 +38,46 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes intro-splash-fade {
+  0% {
+    opacity: 1;
+  }
+
+  58% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes intro-splash-copy {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0.75;
+    transform: translateY(-2px);
+  }
 }
 
 .container-shell {
@@ -61,6 +103,29 @@ body {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 1rem;
+}
+
+.deferred-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}
+
+.anchor-section {
+  scroll-margin-top: 4.75rem;
+}
+
+@media (min-width: 640px) {
+  .anchor-section {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+.intro-splash {
+  animation: intro-splash-fade var(--intro-duration, 1800ms) ease-out forwards;
+}
+
+.intro-splash-copy {
+  animation: intro-splash-copy var(--intro-duration, 1800ms) ease-out forwards;
 }
 
 .gradient-title {

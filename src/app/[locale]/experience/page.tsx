@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { SiteNav } from "@/components/site-nav";
 import { isSupportedLocale, type Locale } from "@/lib/i18n";
 import { experienceTimeline } from "@/lib/experience-data";
@@ -125,6 +126,13 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
           ))}
         </div>
       </section>
+
+      <Link
+        href={`/${locale}`}
+        className="mt-6 sm:mt-8 inline-block rounded-full border border-border px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold transition hover:border-accent"
+      >
+        ← Back
+      </Link>
     </div>
   );
 }

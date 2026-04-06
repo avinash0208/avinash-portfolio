@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WebVitalsBadge } from "@/components/web-vitals-badge";
 import { type Locale, getMessages } from "@/lib/i18n";
 
 type SiteNavProps = {
@@ -55,7 +56,8 @@ export function SiteNav({
         })}
       </nav>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
+        <WebVitalsBadge className="hidden lg:flex" />
         <ThemeToggle />
       </div>
     </header>

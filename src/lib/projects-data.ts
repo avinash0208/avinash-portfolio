@@ -17,7 +17,7 @@ export const projects: ProjectItem[] = [
     summary:
       "Insurance platform journey work focused on conversion, observability, and performance optimization.",
     links: [{ label: "Live Product", url: "https://paytminsurance.co.in/" }],
-    tags: ["React", "A/B Testing", "Performance", "Observability"],
+    tags: ["Vue", "A/B Testing", "Performance", "Observability", "User Journey"],
   },
   {
     name: "BRIGHTLY PLATFORM",
@@ -29,7 +29,7 @@ export const projects: ProjectItem[] = [
         url: "https://apps.brightlysoftware.com/audit-logs?tac=FytF",
       },
     ],
-    tags: ["Micro Frontend", "Module Federation", "Accessibility", "Enterprise"],
+    tags: ["Micro Frontend", "Module Federation", "Accessibility", "Enterprise", "Scalable Architecture"],
   },
   {
     name: "NETFLIX REPLICA",
@@ -46,7 +46,7 @@ export const projects: ProjectItem[] = [
     summary:
       "Data tracking dashboard for pandemic metrics with clean visual information hierarchy.",
     links: [{ label: "Live Demo", url: "https://avinash-covid19-tracker.web.app/" }],
-    tags: ["Data Visualization", "React", "Public APIs"],
+    tags: ["Data Visualization", "React", "Public APIs", "Leaflet"],
   },
   {
     name: "FOOD DELIVERY APP",
@@ -57,6 +57,6 @@ export const projects: ProjectItem[] = [
       { label: "GitHub", url: "https://github.com/avinash0208/food-app-react" },
     ],
     note: "GitHub preview workflows may require CORS-enabled browser settings for specific API calls.",
-    tags: ["React", "State Management", "Routing", "Firebase Hosting"],
+    tags: ["React", "State Management", "Routing", "Reusable Components", "Firebase Hosting"],
   },
 ];

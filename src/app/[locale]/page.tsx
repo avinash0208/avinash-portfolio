@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { IntroAnimation } from "@/components/intro-animation";
 import { HomeStorytelling } from "@/components/portfolio/home-storytelling";
 import { isSupportedLocale } from "@/lib/i18n";
 
@@ -12,5 +13,9 @@ export default async function LocalizedHomePage({ params }: LocalePageProps) {
     notFound();
   }
 
-  return <HomeStorytelling />;
+  return (
+    <IntroAnimation>
+      <HomeStorytelling />
+    </IntroAnimation>
+  );
 }

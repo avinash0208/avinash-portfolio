@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LabWorkbench } from "@/components/lab/lab-workbench";
+import { QueryProvider } from "@/components/query-provider";
 import { SiteNav } from "@/components/site-nav";
 import { getMessages, isSupportedLocale, type Locale } from "@/lib/i18n";
 import { labConcepts } from "@/lib/lab-concepts";
@@ -29,7 +30,9 @@ export default async function LocalizedLabPage({ params }: LocaleLabProps) {
         </Link>
       </header>
 
-      <LabWorkbench concepts={labConcepts} serverRenderedAt={new Date().toISOString()} />
+      <QueryProvider>
+        <LabWorkbench concepts={labConcepts} serverRenderedAt={new Date().toISOString()} />
+      </QueryProvider>
     </div>
   );
 }

@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { IntroAnimation } from "@/components/intro-animation";
-import { QueryProvider } from "@/components/query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -38,11 +36,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
       >
-        <QueryProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <IntroAnimation>{children}</IntroAnimation>
-          </ThemeProvider>
-        </QueryProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

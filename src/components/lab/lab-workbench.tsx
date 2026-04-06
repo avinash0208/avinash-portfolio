@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { CsrQueryShowcase } from "@/components/csr-query-showcase";
 import { CounterDemo } from "@/components/lab/counter-demo";
 import { FilterDemo } from "@/components/lab/filter-demo";
@@ -455,11 +455,29 @@ function ConceptDemo({ conceptId, serverRenderedAt }: { conceptId: LabConcept["i
 
 export function LabWorkbench({ concepts, serverRenderedAt }: LabWorkbenchProps) {
   const [selectedId, setSelectedId] = useState<LabConcept["id"]>(concepts[0]?.id ?? "ssr-boundary");
+  const contentStartRef = useRef<HTMLDivElement | null>(null);
 
   const selectedConcept = useMemo(
     () => concepts.find((concept) => concept.id === selectedId) ?? concepts[0],
     [concepts, selectedId],
   );
+
+  const selectConcept = (conceptId: LabConcept["id"]) => {
+    setSelectedId(conceptId);
+
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      window.requestAnimationFrame(() => {
+        const node = contentStartRef.current;
+        if (!node) {
+          return;
+        }
+
+        const headerOffset = 96;
+        const target = node.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top: target, behavior: "smooth" });
+      });
+    }
+  };
 
   if (!selectedConcept) {
     return null;
@@ -467,13 +485,13 @@ export function LabWorkbench({ concepts, serverRenderedAt }: LabWorkbenchProps) 
 
   return (
     <section className="mt-6 sm:mt-8 grid gap-4 sm:gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-      <aside className="section-card p-3 sm:p-4 lg:p-5">
+      <aside className="section-card min-w-0 overflow-hidden p-3 sm:p-4 lg:p-5">
         <h2 className="text-sm sm:text-base font-semibold">LLD Concept Navigator</h2>
         <p className="mt-2 text-xs text-muted">
           Select a frontend concept to inspect implementation, architecture, and tradeoffs.
         </p>
 
-        <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
+        <div className="mt-3 w-full max-w-full min-w-0 flex gap-2 overflow-x-auto pb-1 lg:mt-4 lg:grid lg:grid-cols-1 lg:gap-2 lg:overflow-visible lg:pb-0">
           {concepts.map((concept) => {
             const isActive = concept.id === selectedConcept.id;
 
@@ -481,25 +499,25 @@ export function LabWorkbench({ concepts, serverRenderedAt }: LabWorkbenchProps) 
               <button
                 key={concept.id}
                 type="button"
-                onClick={() => setSelectedId(concept.id)}
-                className={`w-full rounded-xl border px-2 sm:px-3 py-2 sm:py-3 text-left transition ${
+                onClick={() => selectConcept(concept.id)}
+                className={`shrink-0 rounded-xl border px-3 py-2 text-left transition lg:w-full lg:px-3 lg:py-3 ${
                   isActive
                     ? "border-accent bg-accent text-accent-foreground"
                     : "border-border bg-background/70 hover:border-accent"
                 }`}
               >
-                <p className="text-[9px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] opacity-85">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] opacity-85 lg:text-[11px] lg:tracking-[0.16em]">
                   {concept.category}
                 </p>
-                <p className="mt-1 text-xs sm:text-sm font-semibold">{concept.title}</p>
+                <p className="mt-1 text-xs font-semibold lg:text-sm">{concept.title}</p>
               </button>
             );
           })}
         </div>
       </aside>
 
-      <div className="space-y-3 sm:space-y-4 lg:space-y-5">
-        <article className="section-card p-3 sm:p-4 lg:p-5 lg:p-6">
+      <div ref={contentStartRef} className="min-w-0 scroll-mt-24 space-y-3 sm:space-y-4 lg:space-y-5">
+        <article className="section-card p-3 sm:p-4 lg:p-6">
           <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-muted">
             {selectedConcept.category}
           </p>
