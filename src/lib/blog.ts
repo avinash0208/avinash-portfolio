@@ -12,8 +12,16 @@ export const blogPosts: BlogPostMeta[] = [
     title: "Content Security Policy for Modern Web Security",
     summary:
       "Why CSP remains one of the most practical browser-level defenses against script injection and unsafe resource loading.",
-    date: "2026-04-04",
+    date: "2024-06-15",
     tags: ["Web Security", "CSP", "Frontend Architecture"],
+  },
+  {
+    slug: "accessibility-at-scale",
+    title: "Accessibility at Scale in Product Teams",
+    summary:
+      "A practical playbook for making accessibility measurable and sustainable in fast-moving teams.",
+    date: "2025-09-20",
+    tags: ["A11y", "Testing", "Frontend Platform"],
   },
   {
     slug: "architecting-ssr-csr-boundaries",
@@ -22,14 +30,6 @@ export const blogPosts: BlogPostMeta[] = [
       "How to decide what should render on the server versus the client in modern React applications.",
     date: "2026-04-03",
     tags: ["Next.js", "Architecture", "Performance"],
-  },
-  {
-    slug: "accessibility-at-scale",
-    title: "Accessibility at Scale in Product Teams",
-    summary:
-      "A practical playbook for making accessibility measurable and sustainable in fast-moving teams.",
-    date: "2026-04-03",
-    tags: ["A11y", "Testing", "Frontend Platform"],
   },
 ];
 

@@ -9,6 +9,7 @@ type PushState = {
   token: string | null;
   status: string;
   error: string | null;
+  notificationSent: boolean;
 };
 
 export default function PushNotificationCard() {
@@ -19,6 +20,7 @@ export default function PushNotificationCard() {
     token: null,
     status: "idle",
     error: null,
+    notificationSent: false,
   });
 
   useEffect(() => {
@@ -78,7 +80,7 @@ export default function PushNotificationCard() {
         ...prev,
         token,
         status: "ready",
-        error: token ? null : "FCM token unavailable. Check Firebase env/VAPID key.",
+        error: token ? null : "Failed to generate token.",
       }));
     } catch (error) {
       setState((prev) => ({
@@ -91,20 +93,50 @@ export default function PushNotificationCard() {
 
   const onTestLocalNotification = async () => {
     try {
-      if (!("Notification" in window)) return;
+      if (!("Notification" in window)) {
+        setState((prev) => ({ ...prev, error: "Notifications not supported." }));
+        return;
+      }
+
       if (Notification.permission !== "granted") {
         setState((prev) => ({ ...prev, error: "Grant notification permission first." }));
         return;
       }
-      new Notification("Portfolio Test Notification", {
-        body: "Local notification is working.",
+
+      if (!swReg) {
+        setState((prev) => ({ ...prev, error: "Service worker not ready yet." }));
+        return;
+      }
+
+      // Send notification through service worker for better reliability
+      setState((prev) => ({ ...prev, status: "sending-notification", error: null, notificationSent: false }));
+
+      await swReg.showNotification("Portfolio Test Notification", {
+        body: "Local notification is working. This was sent from the service worker.",
         icon: "/favicon.ico",
+        badge: "/favicon.ico",
+        tag: "test-notification",
+        requireInteraction: false,
       });
+
+      setState((prev) => ({
+        ...prev,
+        status: "ready",
+        notificationSent: true,
+        error: null,
+      }));
+
+      // Clear success message after 3 seconds
+      const timer = setTimeout(() => {
+        setState((prev) => ({ ...prev, notificationSent: false }));
+      }, 3000);
+
+      return () => clearTimeout(timer);
     } catch (error) {
       setState((prev) => ({
         ...prev,
         status: "error",
-        error: `Local notification failed: ${normalizeError(error)}`,
+        error: `Notification failed: ${normalizeError(error)}`,
       }));
     }
   };
@@ -113,22 +145,25 @@ export default function PushNotificationCard() {
     <section className="rounded-xl border border-border bg-surface p-5">
       <h3 className="text-lg font-semibold">Push Notifications</h3>
       <p className="mt-2 text-sm text-muted">
-        Registers service worker, requests permission, and optionally generates
-        Firebase Cloud Messaging token when env vars are configured.
+        Registers service worker, requests permission, and generates FCM token.
+        (Demo mode shows mock token when Firebase env vars not configured.)
       </p>
       <p className="text-sm text-foreground/80">Status: {state.status}</p>
       <p className="text-sm text-foreground/80">Permission: {state.permission}</p>
       {state.token ? <p className="break-all text-xs text-foreground/70">{state.token}</p> : null}
+      {state.notificationSent && (
+        <p className="mt-2 text-sm text-emerald-600 dark:text-emerald-400">✓ Notification sent! Check your notifications.</p>
+      )}
       {state.error ? <p className="mt-2 text-sm text-red-500">{state.error}</p> : null}
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <button onClick={onRequestPermission} className="rounded-md border border-border px-3 py-1.5 text-sm">
+        <button onClick={onRequestPermission} className="cursor-pointer rounded-md border border-border px-3 py-1.5 text-sm hover:border-accent transition">
           Request Permission
         </button>
-        <button onClick={onGetToken} className="rounded-md border border-border px-3 py-1.5 text-sm">
+        <button onClick={onGetToken} className="cursor-pointer rounded-md border border-border px-3 py-1.5 text-sm hover:border-accent transition">
           Get FCM Token
         </button>
-        <button onClick={onTestLocalNotification} className="rounded-md border border-border px-3 py-1.5 text-sm">
+        <button onClick={onTestLocalNotification} className="cursor-pointer rounded-md border border-border px-3 py-1.5 text-sm hover:border-accent transition">
           Test Local Notification
         </button>
       </div>

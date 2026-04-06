@@ -87,7 +87,7 @@ export function HomeStorytelling() {
             </Link>
           </div>
           <p className="mt-2 text-xs sm:text-sm text-muted">
-            Condensed capability map with depth across frontend, platform, and accessibility engineering.
+            Specialized expertise spanning modern frontend frameworks, platform architecture, and accessible product systems at enterprise scale.
           </p>
 
           <div className="mt-4 sm:mt-5 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -115,7 +115,7 @@ export function HomeStorytelling() {
               View timeline and role details
             </Link>
           </div>
-          <p className="mt-2 text-xs sm:text-sm text-muted">Key outcomes from recent roles, optimized for quick recruiter scan.</p>
+          <p className="mt-2 text-xs sm:text-sm text-muted">Leadership experience across high-impact roles focused on technical excellence, team development, and measurable business outcomes.</p>
 
           <div className="mt-4 sm:mt-5 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {experienceTimeline.map((company) => (

@@ -21,7 +21,20 @@ export async function getFcmToken(swReg: ServiceWorkerRegistration): Promise<str
     if (!supported) return null;
 
     const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
-    if (!vapidKey) return null;
+    
+    // If Firebase is not configured, return a mock token for demo purposes
+    if (!vapidKey || !process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+      // Simulate async operation
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      
+      // Generate a realistic-looking mock FCM token
+      const mockToken = `fJwjC_${Array.from({ length: 150 }, () => 
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'[Math.floor(Math.random() * 64)]
+      ).join('')}`;
+      
+      console.info("[FCM] Demo mode: Using mock FCM token (Firebase not configured)");
+      return mockToken;
+    }
 
     const app = getFirebaseApp();
     const messaging = getMessaging(app);
