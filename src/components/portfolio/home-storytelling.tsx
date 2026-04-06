@@ -75,8 +75,7 @@ export function HomeStorytelling() {
             Designing scalable, high-performance frontend systems
           </h1>
           <p className="mt-3 max-w-3xl text-xs leading-6 text-muted sm:mt-4 sm:text-sm sm:leading-7 md:text-base">
-            Senior frontend engineer with 7+ years of experience building performant,
-            accessible, and reliable web platforms at scale.
+           Senior frontend engineer with 7+ years of experience building performant, accessible, and reliable web platforms at scale, leveraging AI-assisted development to accelerate delivery.
           </p>
         </section>
 

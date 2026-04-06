@@ -85,6 +85,18 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
   {
+    title: "AI / Developer Tools",
+    subtitle: "AI-augmented workflows for engineering velocity and code quality",
+    tone: "#0d9488",
+    skills: [
+      { name: "GitHub Copilot", logo: "githubcopilot" },
+      { name: "AI Agents", logo: "openai" },
+      { name: "Claude Code", logo: "anthropic" },
+      { name: "Prompt Engineering", logo: "googlegemini" },
+      { name: "LLM-assisted Development", logo: "openai" },
+    ],
+  },
+  {
     title: "Web Accessibility",
     subtitle: "Inclusive design and assistive technology workflows",
     tone: "#be123c",
