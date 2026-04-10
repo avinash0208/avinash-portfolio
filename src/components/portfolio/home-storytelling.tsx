@@ -11,6 +11,34 @@ const impactByProject: Record<string, string> = {
   "NETFLIX REPLICA": "Production-style architecture exercise with Firebase deployment and modern React patterns",
 };
 
+const skillCardVariants = [
+  "border-sky-300 bg-linear-to-br from-sky-100 via-white to-sky-50 dark:border-sky-400/30 dark:from-sky-500/12 dark:via-background/90 dark:to-background",
+  "border-emerald-300 bg-linear-to-br from-emerald-100 via-white to-emerald-50 dark:border-emerald-400/30 dark:from-emerald-500/12 dark:via-background/90 dark:to-background",
+  "border-amber-300 bg-linear-to-br from-amber-100 via-white to-amber-50 dark:border-amber-400/30 dark:from-amber-500/12 dark:via-background/90 dark:to-background",
+  "border-rose-300 bg-linear-to-br from-rose-100 via-white to-rose-50 dark:border-rose-400/30 dark:from-rose-500/12 dark:via-background/90 dark:to-background",
+  "border-indigo-300 bg-linear-to-br from-indigo-100 via-white to-indigo-50 dark:border-indigo-400/30 dark:from-indigo-500/12 dark:via-background/90 dark:to-background",
+];
+
+const skillChipVariants = [
+  "border-sky-300/90 bg-sky-100/90 text-foreground dark:border-sky-500/40 dark:bg-sky-500/20 dark:text-foreground",
+  "border-emerald-300/90 bg-emerald-100/90 text-foreground dark:border-emerald-500/40 dark:bg-emerald-500/20 dark:text-foreground",
+  "border-amber-300/90 bg-amber-100/90 text-foreground dark:border-amber-500/40 dark:bg-amber-500/20 dark:text-foreground",
+  "border-rose-300/90 bg-rose-100/90 text-foreground dark:border-rose-500/40 dark:bg-rose-500/20 dark:text-foreground",
+];
+
+const experienceCardVariants = [
+  "border-cyan-300 bg-linear-to-br from-cyan-100 via-white to-cyan-50 dark:border-cyan-400/30 dark:from-cyan-500/12 dark:via-background/90 dark:to-background",
+  "border-violet-300 bg-linear-to-br from-violet-100 via-white to-violet-50 dark:border-violet-400/30 dark:from-violet-500/12 dark:via-background/90 dark:to-background",
+  "border-lime-300 bg-linear-to-br from-lime-100 via-white to-lime-50 dark:border-lime-400/30 dark:from-lime-500/12 dark:via-background/90 dark:to-background",
+  "border-orange-300 bg-linear-to-br from-orange-100 via-white to-orange-50 dark:border-orange-400/30 dark:from-orange-500/12 dark:via-background/90 dark:to-background",
+];
+
+const projectCardVariants = [
+  "border-fuchsia-300 bg-linear-to-br from-fuchsia-100 via-white to-fuchsia-50 dark:border-fuchsia-400/30 dark:from-fuchsia-500/12 dark:via-background/90 dark:to-background",
+  "border-teal-300 bg-linear-to-br from-teal-100 via-white to-teal-50 dark:border-teal-400/30 dark:from-teal-500/12 dark:via-background/90 dark:to-background",
+  "border-blue-300 bg-linear-to-br from-blue-100 via-white to-blue-50 dark:border-blue-400/30 dark:from-blue-500/12 dark:via-background/90 dark:to-background",
+];
+
 export function HomeStorytelling() {
   const featuredProjects = projects.filter((project) =>
     ["PAYTM-INSURANCE", "BRIGHTLY PLATFORM", "NETFLIX REPLICA"].includes(project.name),
@@ -91,13 +119,21 @@ export function HomeStorytelling() {
           </p>
 
           <div className="mt-4 sm:mt-5 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {skillCategories.map((category) => (
-              <article key={category.title} className="rounded-xl border border-border bg-background/70 p-3 sm:p-4">
-                <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.14em] text-muted">{category.title}</p>
+            {skillCategories.map((category, categoryIndex) => (
+              <article
+                key={category.title}
+                className={`group rounded-2xl border p-3 shadow-sm ring-1 ring-transparent transition duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:ring-accent/30 sm:p-4 ${skillCardVariants[categoryIndex % skillCardVariants.length]}`}
+              >
+                <p className="inline-flex rounded-full border border-border/70 bg-background/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/90 sm:text-xs">
+                  {category.title}
+                </p>
                 {/* <p className="mt-1 text-xs sm:text-sm text-muted">{category.skills.length} tools and technologies</p> */}
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {category.skills.slice(0, 4).map((skill) => (
-                    <span key={`${category.title}-${skill.name}`} className="rounded-full border border-border px-2 py-0.5 text-xs whitespace-nowrap">
+                  {category.skills.slice(0, 4).map((skill, skillIndex) => (
+                    <span
+                      key={`${category.title}-${skill.name}`}
+                      className={`rounded-full border px-2.5 py-1 text-xs font-semibold whitespace-nowrap transition group-hover:scale-[1.02] ${skillChipVariants[skillIndex % skillChipVariants.length]}`}
+                    >
                       {skill.name}
                     </span>
                   ))}
@@ -115,16 +151,26 @@ export function HomeStorytelling() {
               View timeline and role details
             </Link>
           </div>
-          <p className="mt-2 text-xs sm:text-sm text-muted">Leadership experience across high-impact roles focused on technical excellence, team development, and measurable business outcomes.</p>
+          <p className="mt-2 text-xs sm:text-sm text-muted">
+            Leadership experience across high-impact roles focused on technical excellence, team development, and measurable business outcomes.
+          </p>
 
           <div className="mt-4 sm:mt-5 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {experienceTimeline.map((company) => (
-              <article key={company.company} className="rounded-xl border border-border bg-background/60 p-3 sm:p-4">
-                <h3 className="text-base sm:text-lg font-semibold">{company.company}</h3>
-                <p className="mt-1 text-[10px] sm:text-xs text-muted">{company.period}</p>
+            {experienceTimeline.map((company, companyIndex) => (
+              <article
+                key={company.company}
+                className={`group rounded-2xl border p-3 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:p-4 ${experienceCardVariants[companyIndex % experienceCardVariants.length]}`}
+              >
+                <h3 className="text-base font-bold tracking-tight text-foreground sm:text-lg">{company.company}</h3>
+                <p className="mt-1 inline-flex rounded-full border border-border/70 bg-background/80 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-foreground/80 sm:text-xs">
+                  {company.period}
+                </p>
                 <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                  {(company.roles[0]?.impactChips ?? []).slice(0, 3).map((chip) => (
-                    <span key={`${company.company}-${chip}`} className="rounded-full border border-border px-2 py-0.5 text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                  {(company.roles[0]?.impactChips ?? []).slice(0, 3).map((chip, chipIndex) => (
+                    <span
+                      key={`${company.company}-${chip}`}
+                      className={`rounded-full border px-2.5 py-1 text-[10px] sm:text-xs font-semibold whitespace-nowrap ${skillChipVariants[chipIndex % skillChipVariants.length]}`}
+                    >
                       {chip}
                     </span>
                   ))}
@@ -145,21 +191,24 @@ export function HomeStorytelling() {
           </div>
 
           <div className="mt-4 sm:mt-5 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredProjects.map((project) => (
-              <article key={project.name} className="rounded-xl border border-border bg-background/70 p-3 sm:p-4">
-                <h3 className="text-base sm:text-lg font-semibold">{project.name}</h3>
+            {featuredProjects.map((project, projectIndex) => (
+              <article
+                key={project.name}
+                className={`group rounded-2xl border p-3 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:p-4 ${projectCardVariants[projectIndex % projectCardVariants.length]}`}
+              >
+                <h3 className="text-base font-bold tracking-tight text-foreground sm:text-lg">{project.name}</h3>
                 <p className="mt-2 text-xs sm:text-sm text-muted">{project.summary}</p>
-                <p className="mt-2 sm:mt-3 rounded-lg border border-border bg-surface px-2 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-foreground">
+                <p className="mt-2 sm:mt-3 rounded-xl border border-accent/35 bg-accent/10 px-2 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-foreground">
                   {impactByProject[project.name]}
                 </p>
                 <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                  {project.links.slice(0, 2).map((link) => (
+                  {project.links.slice(0, 2).map((link, linkIndex) => (
                     <a
                       key={`${project.name}-${link.url}`}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full border border-border px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold hover:border-accent transition"
+                      className={`rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold transition hover:-translate-y-0.5 ${skillChipVariants[linkIndex % skillChipVariants.length]}`}
                     >
                       {link.label}
                     </a>
