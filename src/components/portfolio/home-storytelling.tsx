@@ -11,12 +11,12 @@ const impactByProject: Record<string, string> = {
   "NETFLIX REPLICA": "Production-style architecture exercise with Firebase deployment and modern React patterns",
 };
 
-const skillCardVariants = [
+// Card gradient and chip colors are co-indexed so each card's gradient matches its chips
+const cardVariants = [
   "border-sky-300 bg-linear-to-br from-sky-100 via-white to-sky-50 dark:border-sky-400/30 dark:from-sky-500/12 dark:via-background/90 dark:to-background",
   "border-emerald-300 bg-linear-to-br from-emerald-100 via-white to-emerald-50 dark:border-emerald-400/30 dark:from-emerald-500/12 dark:via-background/90 dark:to-background",
   "border-amber-300 bg-linear-to-br from-amber-100 via-white to-amber-50 dark:border-amber-400/30 dark:from-amber-500/12 dark:via-background/90 dark:to-background",
   "border-rose-300 bg-linear-to-br from-rose-100 via-white to-rose-50 dark:border-rose-400/30 dark:from-rose-500/12 dark:via-background/90 dark:to-background",
-  "border-indigo-300 bg-linear-to-br from-indigo-100 via-white to-indigo-50 dark:border-indigo-400/30 dark:from-indigo-500/12 dark:via-background/90 dark:to-background",
 ];
 
 const skillChipVariants = [
@@ -26,18 +26,9 @@ const skillChipVariants = [
   "border-rose-300/90 bg-rose-100/90 text-foreground dark:border-rose-500/40 dark:bg-rose-500/20 dark:text-foreground",
 ];
 
-const experienceCardVariants = [
-  "border-cyan-300 bg-linear-to-br from-cyan-100 via-white to-cyan-50 dark:border-cyan-400/30 dark:from-cyan-500/12 dark:via-background/90 dark:to-background",
-  "border-violet-300 bg-linear-to-br from-violet-100 via-white to-violet-50 dark:border-violet-400/30 dark:from-violet-500/12 dark:via-background/90 dark:to-background",
-  "border-lime-300 bg-linear-to-br from-lime-100 via-white to-lime-50 dark:border-lime-400/30 dark:from-lime-500/12 dark:via-background/90 dark:to-background",
-  "border-orange-300 bg-linear-to-br from-orange-100 via-white to-orange-50 dark:border-orange-400/30 dark:from-orange-500/12 dark:via-background/90 dark:to-background",
-];
-
-const projectCardVariants = [
-  "border-fuchsia-300 bg-linear-to-br from-fuchsia-100 via-white to-fuchsia-50 dark:border-fuchsia-400/30 dark:from-fuchsia-500/12 dark:via-background/90 dark:to-background",
-  "border-teal-300 bg-linear-to-br from-teal-100 via-white to-teal-50 dark:border-teal-400/30 dark:from-teal-500/12 dark:via-background/90 dark:to-background",
-  "border-blue-300 bg-linear-to-br from-blue-100 via-white to-blue-50 dark:border-blue-400/30 dark:from-blue-500/12 dark:via-background/90 dark:to-background",
-];
+const skillCardVariants = cardVariants;
+const experienceCardVariants = cardVariants;
+const projectCardVariants = cardVariants;
 
 export function HomeStorytelling() {
   const featuredProjects = projects.filter((project) =>
@@ -129,10 +120,10 @@ export function HomeStorytelling() {
                 </p>
                 {/* <p className="mt-1 text-xs sm:text-sm text-muted">{category.skills.length} tools and technologies</p> */}
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {category.skills.slice(0, 4).map((skill, skillIndex) => (
+                  {category.skills.slice(0, 4).map((skill) => (
                     <span
                       key={`${category.title}-${skill.name}`}
-                      className={`rounded-full border px-2.5 py-1 text-xs font-semibold whitespace-nowrap transition group-hover:scale-[1.02] ${skillChipVariants[skillIndex % skillChipVariants.length]}`}
+                      className={`rounded-full border px-2.5 py-1 text-xs font-semibold whitespace-nowrap transition group-hover:scale-[1.02] ${skillChipVariants[categoryIndex % skillChipVariants.length]}`}
                     >
                       {skill.name}
                     </span>
@@ -166,10 +157,10 @@ export function HomeStorytelling() {
                   {company.period}
                 </p>
                 <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                  {(company.roles[0]?.impactChips ?? []).slice(0, 3).map((chip, chipIndex) => (
+                  {(company.roles[0]?.impactChips ?? []).slice(0, 3).map((chip) => (
                     <span
                       key={`${company.company}-${chip}`}
-                      className={`rounded-full border px-2.5 py-1 text-[10px] sm:text-xs font-semibold whitespace-nowrap ${skillChipVariants[chipIndex % skillChipVariants.length]}`}
+                      className={`rounded-full border px-2.5 py-1 text-[10px] sm:text-xs font-semibold whitespace-nowrap ${skillChipVariants[companyIndex % skillChipVariants.length]}`}
                     >
                       {chip}
                     </span>
@@ -202,13 +193,13 @@ export function HomeStorytelling() {
                   {impactByProject[project.name]}
                 </p>
                 <div className="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                  {project.links.slice(0, 2).map((link, linkIndex) => (
+                  {project.links.slice(0, 2).map((link) => (
                     <a
                       key={`${project.name}-${link.url}`}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold transition hover:-translate-y-0.5 ${skillChipVariants[linkIndex % skillChipVariants.length]}`}
+                      className={`rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold transition hover:-translate-y-0.5 ${skillChipVariants[projectIndex % skillChipVariants.length]}`}
                     >
                       {link.label}
                     </a>
